@@ -1,0 +1,519 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="d3.js," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="方形分区图123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687.directive(&amp;apos;myPartition&amp;a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="d3.js方形分区、直方图">
+<meta property="og:url" content="http://poloyao.github.io/2016/04/07/d3-js方形分区、直方图/index.html">
+<meta property="og:site_name" content="狐狸糊涂">
+<meta property="og:description" content="方形分区图123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687.directive(&amp;apos;myPartition&amp;a">
+<meta property="og:updated_time" content="2016-04-07T02:00:01.601Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="d3.js方形分区、直方图">
+<meta name="twitter:description" content="方形分区图123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687.directive(&amp;apos;myPartition&amp;a">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> d3.js方形分区、直方图 | 狐狸糊涂 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76116143-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">狐狸糊涂</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                d3.js方形分区、直方图
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-07T09:38:14+08:00" content="2016-04-07">
+              2016-04-07
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="方形分区图"><a href="#方形分区图" class="headerlink" title="方形分区图"></a>方形分区图</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div></pre></td><td class="code"><pre><div class="line">.directive(&apos;myPartition&apos;, function () &#123;</div><div class="line">        return &#123;</div><div class="line">            restrict: &apos;EAC&apos;,</div><div class="line">            template: &apos;&lt;div id=&quot;myPartition&quot;&gt;&lt;/div&gt;&apos;,</div><div class="line">            scope: &#123;</div><div class="line">                val: &apos;=&apos;</div><div class="line">            &#125;,</div><div class="line">            link: function (scope, element) &#123;</div><div class="line">                var w = 750,</div><div class="line">        h = 600,</div><div class="line">        x = d3.scale.linear().range([0, w]),</div><div class="line">        y = d3.scale.linear().range([0, h]);</div><div class="line"></div><div class="line">                var vis = d3.select(&quot;#myPartition&quot;).append(&quot;div&quot;)</div><div class="line">                    .attr(&quot;class&quot;, &quot;chart&quot;)</div><div class="line">                    .style(&quot;width&quot;, w + &quot;px&quot;)</div><div class="line">                    .style(&quot;height&quot;, h + &quot;px&quot;)</div><div class="line">                  .append(&quot;svg:svg&quot;)</div><div class="line">                    .attr(&quot;width&quot;, w)</div><div class="line">                    .attr(&quot;height&quot;, h);</div><div class="line"></div><div class="line">                var partition = d3.layout.partition()</div><div class="line">                    .sort(null)</div><div class="line">                    .value(function (d) &#123; return 1; &#125;);</div><div class="line">                var color = d3.scale.category20c();</div><div class="line">                scope.$watch(&quot;val&quot;, function (root) &#123;</div><div class="line"></div><div class="line">                    if (!root) return;</div><div class="line"></div><div class="line">                    var g = vis.selectAll(&quot;g&quot;)</div><div class="line">                       .data(partition.nodes(root))</div><div class="line">                     .enter().append(&quot;svg:g&quot;)</div><div class="line">                       .attr(&quot;transform&quot;, function (d) &#123; return &quot;translate(&quot; + x(d.y) + &quot;,&quot; + y(d.x) + &quot;)&quot;; &#125;)</div><div class="line"></div><div class="line">                       .on(&quot;click&quot;, click);</div><div class="line"></div><div class="line">                    var kx = w / root.dx,</div><div class="line">                        ky = h / 1;</div><div class="line"></div><div class="line">                    g.append(&quot;svg:rect&quot;)</div><div class="line">                        .attr(&quot;width&quot;, root.dy * kx)</div><div class="line">                        .attr(&quot;height&quot;, function (d) &#123; return d.dx * ky; &#125;)</div><div class="line">                        .attr(&quot;fill&quot;, function (d) &#123; return color((d.children ? d : d.parent).name); &#125;);</div><div class="line">                    //.attr(&quot;class&quot;, function (d) &#123; return d.children ? &quot;parent&quot; : &quot;child&quot;; &#125;);</div><div class="line"></div><div class="line">                    g.append(&quot;svg:text&quot;)</div><div class="line">                        .attr(&quot;transform&quot;, transform)</div><div class="line">                        .attr(&quot;dy&quot;, &quot;.35em&quot;)</div><div class="line">                        .style(&quot;opacity&quot;, function (d) &#123; return d.dx * ky &gt; 12 ? 1 : 0; &#125;)</div><div class="line">                        .text(function (d) &#123; return d.name; &#125;)</div><div class="line"></div><div class="line">                    d3.select(window)</div><div class="line">                        .on(&quot;click&quot;, function () &#123; click(root); &#125;)</div><div class="line"></div><div class="line">                    function click(d) &#123;</div><div class="line">                        if (!d.children) return;</div><div class="line"></div><div class="line">                        kx = (d.y ? w - 40 : w) / (1 - d.y);</div><div class="line">                        ky = h / d.dx;</div><div class="line">                        x.domain([d.y, 1]).range([d.y ? 40 : 0, w]);</div><div class="line">                        y.domain([d.x, d.x + d.dx]);</div><div class="line"></div><div class="line">                        var t = g.transition()</div><div class="line">                            .duration(d3.event.altKey ? 7500 : 750)</div><div class="line">                            .attr(&quot;transform&quot;, function (d) &#123; return &quot;translate(&quot; + x(d.y) + &quot;,&quot; + y(d.x) + &quot;)&quot;; &#125;);</div><div class="line"></div><div class="line">                        t.select(&quot;rect&quot;)</div><div class="line">                            .attr(&quot;width&quot;, d.dy * kx)</div><div class="line">                            .attr(&quot;height&quot;, function (d) &#123; return d.dx * ky; &#125;);</div><div class="line"></div><div class="line">                        t.select(&quot;text&quot;)</div><div class="line">                            .attr(&quot;transform&quot;, transform)</div><div class="line">                            .style(&quot;opacity&quot;, function (d) &#123; return d.dx * ky &gt; 12 ? 1 : 0; &#125;);</div><div class="line"></div><div class="line">                        d3.event.stopPropagation();</div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    function transform(d) &#123;</div><div class="line">                        return &quot;translate(8,&quot; + d.dx * ky / 2 + &quot;)&quot;;</div><div class="line">                    &#125;</div><div class="line">                &#125;)</div><div class="line"></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line"></div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
+<hr>
+<h1 id="直方图"><a href="#直方图" class="headerlink" title="直方图"></a>直方图</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div></pre></td><td class="code"><pre><div class="line">.directive(&apos;myHistogram&apos;, function () &#123;</div><div class="line">        return &#123;</div><div class="line">            restrict: &apos;EAC&apos;,</div><div class="line">            template: &apos;&lt;div id=&quot;myHistogram&quot;&gt;&lt;/div&gt;&apos;,</div><div class="line">            scope: &#123;</div><div class="line">                val: &apos;=&apos;</div><div class="line">            &#125;,</div><div class="line">            link: function (scope, element) &#123;</div><div class="line">                var m = [80, 160, 0, 160], // top right bottom left</div><div class="line">        w = 750 - m[1] - m[3], // width</div><div class="line">        h = 1500 - m[0] - m[2], // height</div><div class="line">        x = d3.scale.linear().range([0, w]),</div><div class="line">        y = 25; // bar height</div><div class="line">                //z = d3.scale.ordinal().range([&quot;steelblue&quot;, &quot;#aaa&quot;]); // bar color</div><div class="line"></div><div class="line">                var hierarchy = d3.layout.partition()</div><div class="line">                //.value(function (d) &#123; return d.size; &#125;);</div><div class="line">                .sort(null)</div><div class="line">                    .value(function (d) &#123; return 1; &#125;);</div><div class="line"></div><div class="line">                var xAxis = d3.svg.axis()</div><div class="line">                    .scale(x)</div><div class="line">                    .orient(&quot;top&quot;);</div><div class="line"></div><div class="line">                var svg = d3.select(&quot;#myHistogram&quot;).append(&quot;svg:svg&quot;)</div><div class="line">                    .attr(&quot;width&quot;, w + m[1] + m[3])</div><div class="line">                    .attr(&quot;height&quot;, h + m[0] + m[2])</div><div class="line">                  .append(&quot;svg:g&quot;)</div><div class="line">                    .attr(&quot;transform&quot;, &quot;translate(&quot; + m[3] + &quot;,&quot; + m[0] + &quot;)&quot;);</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">                var color = d3.scale.category20c();</div><div class="line"></div><div class="line">                svg.append(&quot;svg:rect&quot;)</div><div class="line">                    .attr(&quot;class&quot;, &quot;background&quot;)</div><div class="line">                    .attr(&quot;width&quot;, w)</div><div class="line">                    .attr(&quot;height&quot;, h)</div><div class="line">                    //.attr(&quot;fill&quot;, function (d) &#123; return color((d.children ? d : d.parent).name); &#125;)</div><div class="line">                    .on(&quot;click&quot;, up);</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">                svg.append(&quot;svg:g&quot;)</div><div class="line">                    .attr(&quot;class&quot;, &quot;x axis&quot;);</div><div class="line"></div><div class="line">                svg.append(&quot;svg:g&quot;)</div><div class="line">                    .attr(&quot;class&quot;, &quot;y axis&quot;)</div><div class="line">                  .append(&quot;svg:line&quot;)</div><div class="line">                    .attr(&quot;y1&quot;, &quot;100%&quot;);</div><div class="line"></div><div class="line">                //d3.json(&quot;myjson.json&quot;, function (root) &#123;</div><div class="line">                //    hierarchy.nodes(root);</div><div class="line">                //    x.domain([0, root.value]).nice();</div><div class="line">                //    down(root, 0);</div><div class="line">                //&#125;);</div><div class="line">                scope.$watch(&apos;val&apos;, function (root) &#123;</div><div class="line">                    if (!root) return;</div><div class="line"></div><div class="line"></div><div class="line">                    hierarchy.nodes(root);</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">                    x.domain([0, root.value]).nice();</div><div class="line">                    down(root, 0);</div><div class="line">                &#125;)</div><div class="line"></div><div class="line"></div><div class="line">                function down(d, i) &#123;</div><div class="line">                    if (!d.children || this.__transition__) return;</div><div class="line"></div><div class="line">                    //for (var c = 0; c &lt; d.children.length; c++) &#123;</div><div class="line">                    //    if (!d.children[c].children) &#123;</div><div class="line">                    //        return;</div><div class="line">                    //    &#125;</div><div class="line">                    //&#125;</div><div class="line"></div><div class="line">                    //var cellHight = 20 * d.children.length;</div><div class="line">                    //var mysvg = svg.select(&quot;#myHistogram&quot;).select(&quot;svg&quot;)</div><div class="line">                    //.attr(&quot;height&quot;, cellHight);</div><div class="line">                    //console.log(mysvg.style(&quot;height&quot;));</div><div class="line"></div><div class="line">                    var duration = d3.event &amp;&amp; d3.event.altKey ? 7500 : 750,</div><div class="line">                        delay = duration / d.children.length;</div><div class="line"></div><div class="line">                    // Mark any currently-displayed bars as exiting.</div><div class="line">                    var exit = svg.selectAll(&quot;.enter&quot;).attr(&quot;class&quot;, &quot;exit&quot;);</div><div class="line"></div><div class="line">                    // Entering nodes immediately obscure the clicked-on bar, so hide it.</div><div class="line">                    exit.selectAll(&quot;rect&quot;).filter(function (p) &#123; return p === d; &#125;)</div><div class="line">                        .style(&quot;fill-opacity&quot;, 1e-6);</div><div class="line"></div><div class="line">                    // Enter the new bars for the clicked-on data.</div><div class="line">                    // Per above, entering bars are immediately visible.</div><div class="line">                    var enter = bar(d)</div><div class="line">                        .attr(&quot;transform&quot;, stack(i))</div><div class="line">                        .style(&quot;opacity&quot;, 1);</div><div class="line"></div><div class="line">                    // Have the text fade-in, even though the bars are visible.</div><div class="line">                    // Color the bars as parents; they will fade to children if appropriate.</div><div class="line">                    enter.select(&quot;text&quot;).style(&quot;fill-opacity&quot;, 1e-6);</div><div class="line">                    // enter.select(&quot;rect&quot;).style(&quot;fill&quot;, z(true));</div><div class="line"></div><div class="line">                    // Update the x-scale domain.</div><div class="line">                    x.domain([0, d3.max(d.children, function (d) &#123; return d.value; &#125;)]).nice();</div><div class="line"></div><div class="line">                    // Update the x-axis.</div><div class="line">                    svg.selectAll(&quot;.x.axis&quot;).transition()</div><div class="line">                        .duration(duration)</div><div class="line">                        .call(xAxis);</div><div class="line"></div><div class="line">                    // Transition entering bars to their new position.</div><div class="line">                    var enterTransition = enter.transition()</div><div class="line">                        .duration(duration)</div><div class="line">                        .delay(function (d, i) &#123; return i * delay; &#125;)</div><div class="line">                        .attr(&quot;transform&quot;, function (d, i) &#123; return &quot;translate(0,&quot; + y * i * 1.2 + &quot;)&quot;; &#125;);</div><div class="line"></div><div class="line">                    // Transition entering text.</div><div class="line">                    enterTransition.select(&quot;text&quot;).style(&quot;fill-opacity&quot;, 1);</div><div class="line"></div><div class="line"></div><div class="line">                    // Transition entering rects to the new x-scale.</div><div class="line">                    enterTransition.select(&quot;rect&quot;)</div><div class="line">                        .attr(&quot;width&quot;, function (d) &#123; return x(d.value); &#125;)</div><div class="line">                        //.style(&quot;fill&quot;, function (d) &#123; return z(!!d.children); &#125;);</div><div class="line">                        .attr(&quot;fill&quot;, function (d) &#123; return color((d.children ? d : d.parent).name); &#125;);</div><div class="line"></div><div class="line">                    // Transition exiting bars to fade out.</div><div class="line">                    var exitTransition = exit.transition()</div><div class="line">                        .duration(duration)</div><div class="line">                        .style(&quot;opacity&quot;, 1e-6)</div><div class="line">                        .remove();</div><div class="line"></div><div class="line">                    // Transition exiting bars to the new x-scale.</div><div class="line">                    exitTransition.selectAll(&quot;rect&quot;).attr(&quot;width&quot;, function (d) &#123; return x(d.value); &#125;);</div><div class="line"></div><div class="line">                    // Rebind the current node to the background.</div><div class="line">                    svg.select(&quot;.background&quot;).data([d]).transition().duration(duration * 2); d.index = i;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                function up(d) &#123;</div><div class="line">                    if (!d.parent || this.__transition__) return;</div><div class="line">                    var duration = d3.event &amp;&amp; d3.event.altKey ? 7500 : 750,</div><div class="line">                        delay = duration / d.children.length;</div><div class="line"></div><div class="line">                    // Mark any currently-displayed bars as exiting.</div><div class="line">                    var exit = svg.selectAll(&quot;.enter&quot;).attr(&quot;class&quot;, &quot;exit&quot;);</div><div class="line"></div><div class="line">                    // Enter the new bars for the clicked-on data&apos;s parent.</div><div class="line">                    var enter = bar(d.parent)</div><div class="line">                        .attr(&quot;transform&quot;, function (d, i) &#123; return &quot;translate(0,&quot; + y * i * 1.2 + &quot;)&quot;; &#125;)</div><div class="line">                        .style(&quot;opacity&quot;, 1e-6);</div><div class="line"></div><div class="line">                    // Color the bars as appropriate.</div><div class="line">                    // Exiting nodes will obscure the parent bar, so hide it.</div><div class="line">                    enter.select(&quot;rect&quot;)</div><div class="line">                        //.style(&quot;fill&quot;, function (d) &#123; return z(!!d.children); &#125;)</div><div class="line">                        .attr(&quot;fill&quot;, function (d) &#123; return color((d.children ? d : d.parent).name); &#125;)</div><div class="line">                      .filter(function (p) &#123; return p === d; &#125;)</div><div class="line">                        .style(&quot;fill-opacity&quot;, 1e-6);</div><div class="line"></div><div class="line">                    // Update the x-scale domain.</div><div class="line">                    x.domain([0, d3.max(d.parent.children, function (d) &#123; return d.value; &#125;)]).nice();</div><div class="line"></div><div class="line">                    // Update the x-axis.</div><div class="line">                    svg.selectAll(&quot;.x.axis&quot;).transition()</div><div class="line">                        .duration(duration * 2)</div><div class="line">                        .call(xAxis);</div><div class="line"></div><div class="line">                    // Transition entering bars to fade in over the full duration.</div><div class="line">                    var enterTransition = enter.transition()</div><div class="line">                        .duration(duration * 2)</div><div class="line">                        .style(&quot;opacity&quot;, 1);</div><div class="line"></div><div class="line">                    // Transition entering rects to the new x-scale.</div><div class="line">                    // When the entering parent rect is done, make it visible!</div><div class="line">                    enterTransition.select(&quot;rect&quot;)</div><div class="line">                        .attr(&quot;width&quot;, function (d) &#123; return x(d.value); &#125;)</div><div class="line">                        .each(&quot;end&quot;, function (p) &#123; if (p === d) d3.select(this).style(&quot;fill-opacity&quot;, null); &#125;);</div><div class="line"></div><div class="line">                    // Transition exiting bars to the parent&apos;s position.</div><div class="line">                    var exitTransition = exit.selectAll(&quot;g&quot;).transition()</div><div class="line">                        .duration(duration)</div><div class="line">                        .delay(function (d, i) &#123; return i * delay; &#125;)</div><div class="line">                        .attr(&quot;transform&quot;, stack(d.index));</div><div class="line"></div><div class="line">                    // Transition exiting text to fade out.</div><div class="line">                    exitTransition.select(&quot;text&quot;)</div><div class="line">                        .style(&quot;fill-opacity&quot;, 1e-6);</div><div class="line"></div><div class="line">                    // Transition exiting rects to the new scale and fade to parent color.</div><div class="line">                    exitTransition.select(&quot;rect&quot;)</div><div class="line">                        .attr(&quot;width&quot;, function (d) &#123; return x(d.value); &#125;);</div><div class="line">                    //.style(&quot;fill&quot;, z(true));</div><div class="line"></div><div class="line">                    // Remove exiting nodes when the last child has finished transitioning.</div><div class="line">                    exit.transition().duration(duration * 2).remove();</div><div class="line"></div><div class="line">                    // Rebind the current parent to the background.</div><div class="line">                    svg.select(&quot;.background&quot;).data([d.parent]).transition().duration(duration * 2);</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                var formatNumber = d3.format(&quot;,d&quot;);</div><div class="line">                // Creates a set of bars for the given data node, at the specified index.</div><div class="line">                function bar(d) &#123;</div><div class="line">                    var bar = svg.insert(&quot;svg:g&quot;, &quot;.y.axis&quot;)</div><div class="line">                        .attr(&quot;class&quot;, &quot;enter&quot;)</div><div class="line">                        .attr(&quot;transform&quot;, &quot;translate(0,5)&quot;)</div><div class="line">                      .selectAll(&quot;g&quot;)</div><div class="line">                        .data(d.children)</div><div class="line">                      .enter().append(&quot;svg:g&quot;)</div><div class="line">                        .style(&quot;cursor&quot;, function (d) &#123; return !d.children ? null : &quot;pointer&quot;; &#125;)</div><div class="line">                        .on(&quot;click&quot;, down);</div><div class="line"></div><div class="line">                    bar.append(&quot;svg:text&quot;)</div><div class="line">                        .attr(&quot;x&quot;, -6)</div><div class="line">                        .attr(&quot;y&quot;, y / 2)</div><div class="line">                        .attr(&quot;dy&quot;, &quot;.35em&quot;)</div><div class="line">                        .attr(&quot;text-anchor&quot;, &quot;end&quot;)</div><div class="line">                        .text(function (d) &#123; return d.name; &#125;);</div><div class="line"></div><div class="line">                    bar.append(&quot;svg:rect&quot;)</div><div class="line">                        .attr(&quot;width&quot;, function (d) &#123; return x(d.value); &#125;)</div><div class="line">                        .attr(&quot;height&quot;, y)</div><div class="line">                    .text(function (d) &#123; return d.name &#125;);</div><div class="line"></div><div class="line">                    bar.append(&quot;title&quot;)</div><div class="line">                    .text(function (d) &#123; return d.name; &#125;);</div><div class="line"></div><div class="line">                    bar.append(&quot;text&quot;)</div><div class="line">                        .attr(&quot;y&quot;, y / 2)</div><div class="line">                        .attr(&quot;dy&quot;, &quot;.35em&quot;)</div><div class="line">                    .text(function (d) &#123; return formatNumber(d.value); &#125;);</div><div class="line"></div><div class="line">                    return bar;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                // A stateful closure for stacking bars horizontally.</div><div class="line">                function stack(i) &#123;</div><div class="line">                    var x0 = 0;</div><div class="line">                    return function (d) &#123;</div><div class="line">                        var tx = &quot;translate(&quot; + x0 + &quot;,&quot; + y * i * 1.2 + &quot;)&quot;;</div><div class="line">                        x0 += x(d.value);</div><div class="line">                        return tx;</div><div class="line">                    &#125;;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/d3-js/" rel="tag">#d3.js</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/07/d3-js使用的部分模型/" rel="next" title="d3.js使用的部分模型">
+                <i class="fa fa-chevron-left"></i> d3.js使用的部分模型
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/15/c-获取客户端ip/" rel="prev" title="c#获取客户端ip">
+                c#获取客户端ip <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/yao.jpg"
+               alt="poloyao" />
+          <p class="site-author-name" itemprop="name">poloyao</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#方形分区图"><span class="nav-number">1.</span> <span class="nav-text">方形分区图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#直方图"><span class="nav-number">2.</span> <span class="nav-text">直方图</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">poloyao</span>
+  <span class="author" >yysay@live.com</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+<script type="text/javascript" src="/vendors/jquery-scrollintoview/jquery.scrollintoview.min.js?v=0.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=0.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
